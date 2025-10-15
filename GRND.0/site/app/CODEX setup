@@ -1,0 +1,7 @@
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Codex Reviewer
+        uses: p2achAI/codex-reviewer@v1
