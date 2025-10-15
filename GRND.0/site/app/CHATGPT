@@ -1,0 +1,243 @@
+import React, { useMemo, useState } from "react";
+
+// Simple, single-file demo of the TA^2 shirts site with hosted checkout links (Square/PayPal/etc.).
+// "Buy Now" navigates directly to the provider's checkout URL.
+// Tailwind CSS classes are used for quick styling in the preview environment.
+
+// --- Demo Data (replace checkoutUrl with your real provider link) ---
+const PRODUCTS = [
+  {
+    id: "black-taa2-tee",
+    name: "Black TA^2 Tee",
+    price: 38,
+    currency: "USD",
+    sizes: ["S", "M", "L", "XL"],
+    image: "https://placehold.co/800x800?text=Black+TA%5E2+Tee",
+    checkoutUrl: "https://example.com/checkout/black-taa2-tee"
+  },
+  {
+    id: "white-taa2-tee",
+    name: "White TA^2 Tee",
+    price: 38,
+    currency: "USD",
+    sizes: ["S", "M", "L", "XL"],
+    image: "https://placehold.co/800x800?text=White+TA%5E2+Tee",
+    checkoutUrl: "https://example.com/checkout/white-taa2-tee"
+  }
+];
+
+// --- Utility ---
+function formatPrice(value: number, currency = "USD") {
+  try {
+    return new Intl.NumberFormat(undefined, { style: "currency", currency }).format(value);
+  } catch {
+    return `$${value.toFixed(2)}`;
+  }
+}
+
+// --- Reusable UI ---
+function Button({ children, onClick, as = "button", href, variant = "primary", className = "" }: any) {
+  const base = "inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold shadow-sm transition active:scale-[.99]";
+  const variants: Record<string, string> = {
+    primary: "bg-black text-white hover:bg-black/90",
+    ghost: "bg-white text-black ring-1 ring-black/10 hover:ring-black/20"
+  };
+  if (as === "a" && href) {
+    return (
+      <a href={href} className={[base, variants[variant], className].join(" ")}> {children} </a>
+    );
+  }
+  return (
+    <button onClick={onClick} className={[base, variants[variant], className].join(" ")}> {children} </button>
+  );
+}
+
+function Header({ onNavigate }: { onNavigate: (path: string) => void }) {
+  return (
+    <header className="sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-black/5">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-black text-white grid place-items-center font-bold">TA^2</div>
+          <span className="font-medium">TA Shirts</span>
+        </div>
+        <nav className="flex items-center gap-2 text-sm">
+          <Button variant="ghost" onClick={() => onNavigate("/")}>Home</Button>
+          <Button variant="ghost" onClick={() => onNavigate("/shop")}>Shop</Button>
+          <Button variant="ghost" onClick={() => onNavigate("/about")}>About</Button>
+          <Button variant="ghost" onClick={() => onNavigate("/contact")}>Contact</Button>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-black/5 mt-16">
+      <div className="max-w-6xl mx-auto px-4 py-10 text-sm text-black/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>© {new Date().getFullYear()} TA. All rights reserved.</p>
+        <div className="flex gap-4">
+          <a className="hover:underline" href="#">Terms</a>
+          <a className="hover:underline" href="#">Privacy</a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function ProductCard({ product, onOpen }: { product: any; onOpen: (id: string) => void }) {
+  return (
+    <div className="rounded-2xl border border-black/10 shadow-sm overflow-hidden bg-white">
+      <img src={product.image} alt={product.name} className="w-full aspect-square object-cover" />
+      <div className="p-4 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold">{product.name}</h3>
+          <span className="text-black/70">{formatPrice(product.price, product.currency)}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button onClick={() => onOpen(product.id)} className="flex-1">View</Button>
+          <Button as="a" href={product.checkoutUrl} variant="primary" className="flex-1">Buy Now</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SizeSelector({ sizes, value, onChange }: { sizes: string[]; value: string | null; onChange: (s: string) => void }) {
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {sizes.map((s) => (
+        <button
+          key={s}
+          onClick={() => onChange(s)}
+          className={[
+            "px-3 py-1 rounded-xl text-sm border",
+            value === s ? "bg-black text-white border-black" : "bg-white text-black border-black/20 hover:border-black/40"
+          ].join(" ")}
+        >
+          {s}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ProductDetail({ id, onClose }: { id: string; onClose: () => void }) {
+  const product = useMemo(() => PRODUCTS.find((p) => p.id === id), [id]);
+  const [size, setSize] = useState<string | null>(null);
+  if (!product) return null;
+  return (
+    <div className="fixed inset-0 z-20 bg-black/40 grid place-items-center p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl max-w-3xl w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="grid md:grid-cols-2">
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          <div className="p-6 flex flex-col gap-4">
+            <h2 className="text-xl font-semibold">{product.name}</h2>
+            <p className="text-black/70">Premium feel. Minimal logo. Lifetime membership (RFID coming soon).</p>
+            <div className="flex items-center justify-between">
+              <span className="text-lg font-medium">{formatPrice(product.price, product.currency)}</span>
+            </div>
+            <div>
+              <p className="text-sm mb-2">Select size</p>
+              <SizeSelector sizes={product.sizes} value={size} onChange={setSize} />
+            </div>
+            <div className="flex gap-2 mt-auto">
+              <Button variant="ghost" onClick={onClose}>Close</Button>
+              <Button
+                as="a"
+                href={product.checkoutUrl}
+                variant="primary"
+                className="flex-1"
+              >
+                Buy Now
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Hero({ onPrimary, onSecondary }: { onPrimary: () => void; onSecondary: () => void }) {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 items-center gap-10">
+        <div className="flex flex-col gap-6">
+          <h1 className="text-3xl md:text-5xl font-semibold leading-tight">Limited Drop #001<br/>Black tee · White TA^2 logo</h1>
+          <p className="text-black/70">Simple. Clean. Built for daily wear with a performance feel.</p>
+          <div className="flex gap-3">
+            <Button onClick={onPrimary} variant="primary">Buy Now</Button>
+            <Button onClick={onSecondary} variant="ghost">View Details</Button>
+          </div>
+        </div>
+        <div className="rounded-3xl overflow-hidden border border-black/10 shadow-sm bg-white">
+          <img src="https://placehold.co/1200x900?text=TA%5E2+Hero" alt="TA^2 Black Tee" className="w-full h-full object-cover" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Shop({ onOpen }: { onOpen: (id: string) => void }) {
+  return (
+    <section className="max-w-6xl mx-auto px-4 py-10">
+      <div className="flex items-end justify-between mb-6">
+        <h2 className="text-xl font-semibold">Shop</h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {PRODUCTS.map((p) => (
+          <ProductCard key={p.id} product={p} onOpen={onOpen} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section className="max-w-3xl mx-auto px-4 py-16">
+      <h2 className="text-2xl font-semibold mb-4">About TA^2</h2>
+      <p className="text-black/70">Limited drops. Premium feel. Lifetime membership. We keep it simple so you can focus on the fit.</p>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section className="max-w-3xl mx-auto px-4 py-16">
+      <h2 className="text-2xl font-semibold mb-4">Contact</h2>
+      <p className="text-black/70">Questions? Email <a className="underline" href="mailto:hello@example.com">hello@example.com</a></p>
+    </section>
+  );
+}
+
+export default function App() {
+  const [route, setRoute] = useState("/");
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  const navigate = (path: string) => setRoute(path);
+
+  const openFeatured = () => setOpenId(PRODUCTS[0].id);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-black">
+      <Header onNavigate={navigate} />
+
+      {route === "/" && (
+        <>
+          <Hero onPrimary={() => (window.location.href = PRODUCTS[0].checkoutUrl)} onSecondary={openFeatured} />
+          <Shop onOpen={(id) => setOpenId(id)} />
+        </>
+      )}
+
+      {route === "/shop" && <Shop onOpen={(id) => setOpenId(id)} />}
+      {route === "/about" && <About />}
+      {route === "/contact" && <Contact />}
+
+      <Footer />
+
+      {openId && <ProductDetail id={openId} onClose={() => setOpenId(null)} />}
+    </div>
+  );
+}
