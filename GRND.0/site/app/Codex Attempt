@@ -1,0 +1,162 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/GRND.0/site/index.html b/GRND.0/site/index.html
+new file mode 100644
+index 0000000000000000000000000000000000000000..8f28840fc9ee7e6de3dafce795b6092c82802ee1
+--- /dev/null
++++ b/GRND.0/site/index.html
+@@ -0,0 +1,152 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>Threaded Dreams | Premium Graphic Tees</title>
++  <link rel="stylesheet" href="styles.css" />
++  <link rel="preconnect" href="https://fonts.googleapis.com" />
++  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
++</head>
++<body>
++  <header class="hero">
++    <nav class="navbar">
++      <div class="logo">Threaded Dreams</div>
++      <a class="button ghost" href="#shop">Shop Tees</a>
++    </nav>
++    <div class="hero__content">
++      <p class="eyebrow">Ultra-soft • Sustainably made • Artist designed</p>
++      <h1>Wear Your Imagination</h1>
++      <p>Discover premium graphic tees inspired by art, music, and the cosmos. Each piece is crafted in small batches with eco-friendly fabrics for a feel-good fit.</p>
++      <div class="hero__actions">
++        <a class="button" href="#shop">Explore Collection</a>
++        <a class="button ghost" href="#story">Our Story</a>
++      </div>
++      <div class="hero__badge">
++        <span>Free shipping on orders over $75</span>
++      </div>
++    </div>
++    <img class="hero__image" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80" alt="Model wearing a graphic t-shirt" />
++  </header>
++
++  <main>
++    <section class="features" id="story">
++      <div class="container">
++        <div class="section__header">
++          <h2>Designed for dreamers, made for everyday wear</h2>
++          <p>Our tees start with organic cotton, then we add original illustrations from emerging artists around the globe. From sketchbook to screen print, every shirt tells a story.</p>
++        </div>
++        <div class="grid">
++          <article class="feature">
++            <div class="feature__icon">🌱</div>
++            <h3>Sustainable Fabrics</h3>
++            <p>Responsibly sourced cotton and water-saving dyes help keep our impact on the planet as soft as our shirts.</p>
++          </article>
++          <article class="feature">
++            <div class="feature__icon">🖌️</div>
++            <h3>Artist Collaborations</h3>
++            <p>We partner with independent illustrators and share profits to support the creative community behind every design.</p>
++          </article>
++          <article class="feature">
++            <div class="feature__icon">🧵</div>
++            <h3>Premium Construction</h3>
++            <p>Double-stitched seams, tagless labels, and buttery-soft fabric blends for a tee that feels as good as it looks.</p>
++          </article>
++        </div>
++      </div>
++    </section>
++
++    <section class="collection" id="shop">
++      <div class="container">
++        <div class="section__header">
++          <h2>Featured Graphic Tees</h2>
++          <p>Limited-run drops that ship in plastic-free packaging. Snag your favorite before it's gone.</p>
++        </div>
++        <div class="grid cards">
++          <article class="card">
++            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80" alt="Solar Flare t-shirt" />
++            <div class="card__body">
++              <h3>Solar Flare</h3>
++              <p>A vibrant burst of cosmic color printed on a midnight black tee.</p>
++              <span class="price">$35</span>
++              <a class="button" href="#">Add to Cart</a>
++            </div>
++          </article>
++          <article class="card">
++            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80" alt="Waveform t-shirt" />
++            <div class="card__body">
++              <h3>Waveform</h3>
++              <p>A minimal line-art ode to sound waves and late-night creativity.</p>
++              <span class="price">$32</span>
++              <a class="button" href="#">Add to Cart</a>
++            </div>
++          </article>
++          <article class="card">
++            <img src="https://images.unsplash.com/photo-1525171254930-643fc658b64e?auto=format&fit=crop&w=600&q=80" alt="Lunar Bloom t-shirt" />
++            <div class="card__body">
++              <h3>Lunar Bloom</h3>
++              <p>Floral silhouettes meeting starlit gradients for an ethereal vibe.</p>
++              <span class="price">$38</span>
++              <a class="button" href="#">Add to Cart</a>
++            </div>
++          </article>
++        </div>
++      </div>
++    </section>
++
++    <section class="testimonials">
++      <div class="container">
++        <div class="section__header">
++          <h2>Loved by creators everywhere</h2>
++        </div>
++        <div class="grid">
++          <blockquote class="quote">
++            <p>“These tees are my go-to for gallery openings—comfort meets conversation starter.”</p>
++            <cite>— Mia L., Visual Artist</cite>
++          </blockquote>
++          <blockquote class="quote">
++            <p>“I live in Threaded Dreams. Softest shirts ever and the designs are next level.”</p>
++            <cite>— Jordan P., Music Producer</cite>
++          </blockquote>
++          <blockquote class="quote">
++            <p>“Finally, a brand that nails sustainability without sacrificing style.”</p>
++            <cite>— Casey R., Content Creator</cite>
++          </blockquote>
++        </div>
++      </div>
++    </section>
++
++    <section class="cta">
++      <div class="container">
++        <div class="cta__content">
++          <h2>Join the Dreamers Club</h2>
++          <p>Get early access to drops, behind-the-scenes art, and members-only discounts.</p>
++        </div>
++        <form class="cta__form">
++          <label class="sr-only" for="email">Email address</label>
++          <input id="email" type="email" name="email" placeholder="you@email.com" required />
++          <button class="button" type="submit">Sign Up</button>
++        </form>
++      </div>
++    </section>
++  </main>
++
++  <footer class="footer">
++    <div class="container">
++      <div class="footer__brand">Threaded Dreams</div>
++      <ul class="footer__links">
++        <li><a href="#story">Story</a></li>
++        <li><a href="#shop">Shop</a></li>
++        <li><a href="#">Size Guide</a></li>
++        <li><a href="#">Contact</a></li>
++      </ul>
++      <p class="footer__legal">© <span id="year"></span> Threaded Dreams. Crafted with care on recycled pixels.</p>
++    </div>
++  </footer>
++
++  <script>
++    document.getElementById('year').textContent = new Date().getFullYear();
++  </script>
++</body>
++</html>
+ 
+EOF
+)
